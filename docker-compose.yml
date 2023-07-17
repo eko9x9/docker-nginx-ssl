@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+
+  web-nginx:
+    build: 
+      context: ./docker
+      dockerfile: Dockerfile
+    container_name: web-nginx
+    ports: 
+      - "80:80"
+      - "443:443"
+    networks: 
+      - default
+    restart: always
+    volumes:
+      - ./certbot/conf:/etc/nginx/ssl
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+
+  server:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: server
+    ports: 
+      - "7072:7072"
+    networks: 
+      - default
+    restart: always
+    volumes: 
+      - /app/node_modules
+
+networks: 
+  default:
