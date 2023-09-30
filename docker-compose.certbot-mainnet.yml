@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  certbot-explorer-mainnet:
+      image: certbot/certbot
+      container_name: certbot-explorer-mainnet
+      volumes: 
+        - ./certbot-mainnet/conf:/etc/letsencrypt
+        - ./certbot-mainnet/www:/var/www/certbot
+      command: certonly --webroot -w /var/www/certbot --email eko.nr@yahoo.com -d explorer.bionicecosystem.io --agree-tos
+  
+  certbot-rpc-mainnet:
+      image: certbot/certbot
+      container_name: certbot-rpc-mainnet
+      volumes: 
+        - ./certbot-mainnet/conf:/etc/letsencrypt
+        - ./certbot-mainnet/www:/var/www/certbot
+      command: certonly --webroot -w /var/www/certbot --email eko.nr@yahoo.com -d mainnet.bionicecosystem.io --agree-tos 
+  
+  # certbot-ws-rpc-mainnet:
+  #     image: certbot/certbot
+  #     container_name: certbot-ws-rpc-mainnet
+  #     volumes: 
+  #       - ./certbot-mainnet/conf:/etc/letsencrypt
+  #       - ./certbot-mainnet/www/ws-rpc-mainnet:/var/www/certbot/ws-rpc-mainnet
+  #     command: certonly --webroot -w /var/www/certbot --email eko.nr@yahoo.com -d ws-mainnet.bionicecosystem.io --agree-tos 
+  
+  # certbot-rpc-explorer-mainnet:
+  #     image: certbot/certbot
+  #     container_name: certbot-rpc-explorer-mainnet
+  #     volumes: 
+  #       - ./certbot-mainnet/conf:/etc/letsencrypt
+  #       - ./certbot-mainnet/www/rpc-explorer-mainnet:/var/www/certbot/rpc-explorer-mainnet
+  #     command: certonly --webroot -w /var/www/certbot --email eko.nr@yahoo.com -d rpc-explorer.bionicecosystem.io --agree-tos
+  
+  # certbot-bridge-mainnet:
+  #     image: certbot/certbot
+  #     container_name: certbot-bridge-mainnet
+  #     volumes: 
+  #       - ./certbot-mainnet/conf:/etc/letsencrypt
+  #       - ./certbot-mainnet/www/bridge-mainnet:/var/www/certbot/bridge-mainnet
+  #     command:  certonly --webroot -w /var/www/certbot --email eko.nr@yahoo.com -d bridge.bionicecosystem.io --agree-tos 

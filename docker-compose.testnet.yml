@@ -1,0 +1,72 @@
+version: "3"
+
+services:
+
+  web-nginx:
+    build: 
+      context: ./docker
+      dockerfile: Dockerfile
+    container_name: web-nginx
+    ports: 
+      - "80:80"
+      - "443:443"
+    networks: 
+      - default
+    restart: always
+    volumes:
+      - ./certbot-mainnet/conf:/etc/nginx/ssl
+      - ./certbot-mainnet/conf:/etc/letsencrypt
+      - ./certbot-mainnet/www:/var/www/certbot
+
+  explorer-mainnet:
+    build: 
+      context: ./proxy/mainnet/explorer_mainnet
+      dockerfile: Dockerfile
+    container_name: explorer-mainnet
+    ports: 
+      - "3000:3000"
+    networks: 
+      - default
+    restart: always
+    volumes: 
+      - /app/node_modules
+
+  rpc-mainnet:
+    build: 
+      context: ./proxy/mainnet/rpc_mainnet
+      dockerfile: Dockerfile
+    container_name: rpc-mainnet
+    ports: 
+      - "3001:3001"
+    networks: 
+      - default
+    restart: always
+    volumes: 
+      - /app/node_modules
+
+  bridge-mainnet:
+    build: 
+      context: ./proxy/mainnet/bridge_mainnet
+      dockerfile: Dockerfile
+    container_name: bridge-mainnet
+    ports: 
+      - "3002:3002"
+    networks: 
+      - default
+    restart: always
+    volumes: 
+      - /app/node_modules
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes: 
+      - ./certbot-mainnet/conf:/etc/letsencrypt
+      - ./certbot-mainnet/www:/var/www/certbot
+    command: >
+      certonly --webroot -w /var/www/certbot --email eko.nr@yahoo.com -d explorer.bionicecosystem.io --agree-tos |
+      certonly --webroot -w /var/www/certbot --email eko.nr@yahoo.com -d mainnet.bionicecosystem.io --agree-tos |
+      certonly --webroot -w /var/www/certbot --email eko.nr@yahoo.com -d bridge.bionicecosystem.io --agree-tos 
+
+networks: 
+  default:

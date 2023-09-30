@@ -1,0 +1,93 @@
+version: "3"
+
+services:
+
+  nginx-mainnet:
+    build: 
+      context: ./docker/mainnet
+      dockerfile: Dockerfile
+    container_name: nginx-mainnet
+    image: nginx-mainnet
+    ports: 
+      - "80:80"
+      - "443:443"
+    networks: 
+      - default
+    restart: always
+    volumes:
+      - ./certbot-mainnet/conf:/etc/nginx/ssl
+      - ./certbot-mainnet/conf:/etc/letsencrypt
+      - ./certbot-mainnet/www:/var/www/certbot
+
+  explorer-mainnet:
+    build: 
+      context: ./proxy/mainnet/explorer_mainnet
+      dockerfile: Dockerfile
+    container_name: explorer-mainnet
+    image: explorer-mainnet
+    ports: 
+      - "3000:3000"
+    networks: 
+      - default
+    restart: always
+    volumes: 
+      - /app/node_modules
+
+  rpc-mainnet:
+    build: 
+      context: ./proxy/mainnet/rpc_mainnet
+      dockerfile: Dockerfile
+    container_name: rpc-mainnet
+    image: rpc-mainnet
+    ports: 
+      - "3001:3001"
+    networks: 
+      - default
+    restart: always
+    volumes: 
+      - /app/node_modules
+
+  ws-rpc-mainnet:
+    build: 
+      context: ./proxy/mainnet/ws_rpc_mainnet
+      dockerfile: Dockerfile
+    container_name: ws-rpc-mainnet
+    image: ws-rpc-mainnet
+    ports: 
+      - "3002:3002"
+    networks: 
+      - default
+    restart: always
+    volumes: 
+      - /app/node_modules
+
+  rpc-explorer-mainnet:
+    build: 
+      context: ./proxy/mainnet/rpc_explorer_mainnet
+      dockerfile: Dockerfile
+    container_name: rpc-explorer-mainnet
+    image: rpc-explorer-mainnet
+    ports: 
+      - "3004:3004"
+    networks: 
+      - default
+    restart: always
+    volumes: 
+      - /app/node_modules
+
+  bridge-mainnet:
+    build: 
+      context: ./proxy/mainnet/bridge_mainnet
+      dockerfile: Dockerfile
+    container_name: bridge-mainnet
+    image: bridge-mainnet
+    ports: 
+      - "3003:3003"
+    networks: 
+      - default
+    restart: always
+    volumes: 
+      - /app/node_modules
+
+networks: 
+  default:
